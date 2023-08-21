@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "statement": "1. Which among the following is the biggest animal in the world?",
+        "options":[
+            "Blue Whale",
+            "Shark",
+            "Elephant",
+            "Camel"
+        ],
+        "answerIndex": 0
+    },
+    {
+        "id": 2,
+        "statement": "2. Which among the following is the biggest animal in the world?",
+        "options":[
+            "Blue Whale",
+            "Shark",
+            "Elephant",
+            "Camel"
+        ],
+        "answerIndex": 0
+    },
+    {
+        "id": 3,
+        "statement": "3. Which among the following is the biggest animal in the world?",
+        "options":[
+            "Blue Whale",
+            "Shark",
+            "Elephant",
+            "Camel"
+        ],
+        "answerIndex": 0
+    },
+    {
+        "id": 4,
+        "statement": "4. Which among the following is the biggest animal in the world?",
+        "options":[
+            "Blue Whale",
+            "Shark",
+            "Elephant",
+            "Camel"
+        ],
+        "answerIndex": 0
+    },
+    {
+        "id": 5,
+        "statement": "5. Which among the following is the biggest animal in the world?",
+        "options":[
+            "Blue Whale",
+            "Shark",
+            "Elephant",
+            "Camel"
+        ],
+        "answerIndex": 0
+    }
+]
