@@ -1,114 +1,100 @@
 import React, { useState } from 'react';
-import optionsData from './options.json';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import countriesData from './countriesData.json';
 import './App.css';
 
-import wrongAudio from './wrong.mp3'; // Import the audio file
-
-export default function App() {
+function App() {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const correctAnswer = 'Pakistan';
-  const isAnswerCorrect = selectedOption === correctAnswer;
-  const isWrongSelection = selectedOption !== null && !isAnswerCorrect;
-  const isFirstQuestion = true; // Set this to true for the first question
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Keep track of current question index
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
 
-  const handleOptionClick = (event, country) => {
+  const handleOptionClick = (event, capital) => {
     event.preventDefault();
-    setSelectedOption(country);
+    if (selectedOption !== null) return; // Only allow selection if no option is already selected
+    setSelectedOption(capital);
 
-    // Play wrong audio if the answer is wrong
-    if (country !== correctAnswer) {
-      playWrongAudio();
+    const isCorrectAnswer = capital === countriesData[currentQuestionIndex].capital;
+    const options = document.querySelectorAll('.OptionButton');
+
+    options.forEach(option => {
+      const countryData = countriesData.find(data => data.capital === option.innerText);
+      option.classList.remove('selected', 'correct', 'wrong');
+
+      if (option.innerText === capital) {
+        option.classList.add('selected', isCorrectAnswer ? 'correct' : 'wrong');
+      } else if (isCorrectAnswer && countryData.capital === countriesData[currentQuestionIndex].capital) {
+        option.classList.add('correct');
+      }
+    });
+
+    if (isCorrectAnswer) {
+      setCorrectAnswersCount(correctAnswersCount + 1);
     }
   };
 
-  const playWrongAudio = () => {
-    const audio = new Audio(wrongAudio);
-    audio.play();
-  };
-
   const handleNextQuestion = () => {
-    setSelectedOption(null); // Reset selected option for the next question
-    setCurrentQuestionIndex(currentQuestionIndex + 1); // Move to the next question
+    setSelectedOption(null);
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
   };
 
-  const handlePreviousQuestion = () => {
-    setSelectedOption(null); // Reset selected option when going back
-    setCurrentQuestionIndex(currentQuestionIndex - 1); // Move to the previous question
-  };
-
-  const currentQuestion = optionsData[currentQuestionIndex];
-
-  // ... rest of the component code
-
-
+  const currentQuestion = countriesData[currentQuestionIndex];
+  const totalQuestions = countriesData.length;
+  const progress = currentQuestionIndex + 1;
+  const correctPercentage = (correctAnswersCount / totalQuestions) * 100;
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <h2 className="card-title">Guess the Flag!</h2>
-        <p className="card-text">
-          <img src={require('./images/R.png')} alt="Flag R" className="flag-img" />
-        </p>
-
-        {currentQuestion && (
-          <div>
-            <p className="mb-2">
-              Question {currentQuestionIndex + 1}/{optionsData.length}: {currentQuestion.question}
-            </p>
-        
-        {optionsData.map((option, index) => (
-          <div key={index} className="inline-buttons d-inline-block text-center mt-3">
-            <button
-              className={`btn btn-primary mx-2 btn-default btn-equal-size ${selectedOption === option.country
-                  ? selectedOption === correctAnswer
-                    ? 'correct-answer'
-                    : isWrongSelection && option.country === selectedOption
-                      ? 'wrong-answer wrong-selection'
-                      : 'wrong-answer'
-                  : ''
-                }`}
-              onClick={(event) => handleOptionClick(event, option.country)}
-            >
-              {option.country}
-              {selectedOption === correctAnswer && option.country === correctAnswer && (
-                <FontAwesomeIcon icon={faCheck} className="mark-icon mark-icc" />
-              )}
-              {isWrongSelection && option.country === selectedOption && (
-                <FontAwesomeIcon icon={faTimes} className="mark-icon cross-icon" />
-              )}
-            </button>
-          </div>
-        ))}
-        <div className="button-group mt-3 d-flex justify-content-between">
-              <button
-                className={`btn btn-primary ${isFirstQuestion ? 'disabled' : ''}`}
-                onClick={handlePreviousQuestion}
-              >
-                Back
-              </button>
-              <button className="btn btn-primary" onClick={handleNextQuestion}>
-                Next
-              </button>
+    <div className="App">
+      <div className="container py-5">
+        <div className="row justify-content-center">
+          <div className="col-md-8">
+            <div className="card">
+              <div className="card-body text-center">
+                <h1 className="mb-4">Capital Quiz</h1>
+                {currentQuestion && (
+                  <div className="Question">
+                    <h2 className="mb-4">What is the capital of {currentQuestion.country}?</h2>
+                    <ul className="Options">
+                      {countriesData.map((countryData, index) => (
+                        <li
+                          key={index}
+                          className={`OptionButton ${
+                            selectedOption === countryData.capital ? 'selected' : ''
+                          }`}
+                          onClick={(event) => handleOptionClick(event, countryData.capital)}
+                        >
+                          {countryData.capital}
+                        </li>
+                      ))}
+                    </ul>
+                    {selectedOption && (
+                      <p className={`Result mt-3 ${selectedOption === currentQuestion.capital ? 'text-success' : 'text-danger'}`}>
+                        Your answer is {selectedOption === currentQuestion.capital ? 'correct' : 'wrong'}.
+                      </p>
+                    )}
+                    <p className="Progress mt-3">
+                      Question {progress} of {totalQuestions}
+                    </p>
+                    <button
+                      className="NextButton btn btn-primary mt-3"
+                      disabled={!selectedOption}
+                      onClick={handleNextQuestion}
+                    >
+                      {currentQuestionIndex === totalQuestions - 1 ? 'Show Results' : 'Next Question'}
+                    </button>
+                  </div>
+                )}
+                {currentQuestionIndex === totalQuestions && (
+                  <div className="Results mt-4">
+                    <h2>Quiz Results</h2>
+                    <p>Your score: {correctPercentage.toFixed(2)}%</p>
+                  </div>
+                )}
+              </div>
             </div>
-        {/* Display feedback messages */}
-        {isWrongSelection && (
-          <p className={`answer-message ${isWrongSelection ? 'wrong-answer-message' : 'correct-answer-message'}`}>
-            {isWrongSelection
-              ? `You selected the wrong answer. The correct answer is: ${correctAnswer}.`
-              : `Congratulations! You selected the correct answer: ${correctAnswer}.`}
-          </p>
-        )}
-        {selectedOption === correctAnswer && (
-          <p className={`answer-message correct-answer-message ${isWrongSelection ? 'popup' : ''}`}>
-            Congratulations! You selected the correct answer: {correctAnswer}.
-          </p>
-        )}
-      </div>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
+export default App;
