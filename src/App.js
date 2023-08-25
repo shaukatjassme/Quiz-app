@@ -36,6 +36,12 @@ function App() {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
   };
 
+  const handleRestartQuiz = () => {
+    setSelectedOption(null);
+    setCurrentQuestionIndex(0);
+    setCorrectAnswersCount(0);
+  };
+
   const currentQuestion = countriesData[currentQuestionIndex];
   const totalQuestions = countriesData.length;
   const progress = currentQuestionIndex + 1;
@@ -52,6 +58,9 @@ function App() {
                 {currentQuestion && (
                   <div className="Question">
                     <h2 className="mb-4">What is the capital of {currentQuestion.country}?</h2>
+                    <p className="Progress mt-3">
+                      Question {progress} of {totalQuestions}
+                    </p>
                     <ul className="Options">
                       {countriesData.map((countryData, index) => (
                         <li
@@ -70,15 +79,12 @@ function App() {
                         Your answer is {selectedOption === currentQuestion.capital ? 'correct' : 'wrong'}.
                       </p>
                     )}
-                    <p className="Progress mt-3">
-                      Question {progress} of {totalQuestions}
-                    </p>
                     <button
                       className="NextButton btn btn-primary mt-3"
                       disabled={!selectedOption}
                       onClick={handleNextQuestion}
                     >
-                      {currentQuestionIndex === totalQuestions - 1 ? 'Show Results' : 'Next Question'}
+                      {currentQuestionIndex === totalQuestions - 1 ? 'Show Results' : 'Next'}
                     </button>
                   </div>
                 )}
@@ -86,6 +92,12 @@ function App() {
                   <div className="Results mt-4">
                     <h2>Quiz Results</h2>
                     <p>Your score: {correctPercentage.toFixed(2)}%</p>
+                    <button
+                      className="NextButton btn btn-primary mt-3"
+                      onClick={handleRestartQuiz}
+                    >
+                      Back to Start
+                    </button>
                   </div>
                 )}
               </div>

@@ -15,7 +15,9 @@ body {
   justify-content: center;
   height: 100vh;
 }
-
+.card{
+  background-color: #b8d4b8;
+}
 /* Quiz Styles */
 .Question {
   background-color: #ffffff;
@@ -57,11 +59,12 @@ h2 {
 }
 
 .OptionButton {
-  background-color: #f0f0f0;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  color: #333;
+  background-color: #b8d4b8;
+  /* border: 2px solid #ccc; */
+  /* border-radius: 12px; */
+  color: #201414;
   cursor: pointer;
+  font-family: cursive;
   font-size: 16px;
   margin: 10px;
   padding: 10px 20px;
