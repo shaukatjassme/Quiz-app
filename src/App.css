@@ -15,8 +15,13 @@ body {
   justify-content: center;
   height: 100vh;
 }
+
+nav.bg-body-tertiary.navbar.navbar-expand-lg.navbar-light {
+  margin-top: 30px;
+}
+
 .card{
-  background-color: #b8d4b8;
+  background-color: #3ea38b;
 }
 /* Quiz Styles */
 .Question {
@@ -59,7 +64,7 @@ h2 {
 }
 
 .OptionButton {
-  background-color: #b8d4b8;
+  background-color: #3ea38b;
   /* border: 2px solid #ccc; */
   /* border-radius: 12px; */
   color: #201414;
